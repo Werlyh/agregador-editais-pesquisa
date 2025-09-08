@@ -1,7 +1,7 @@
 from .scraper import rodar_todos_scrapers
 from flask import Blueprint, render_template, request, jsonify
 from datetime import datetime
-from .models import db 
+from .models import db, Edital
 
 main_bp = Blueprint('main', __name__)
 
