@@ -1,8 +1,5 @@
 # 📂 Agregador de Editais
 
-![GIF do Projeto em Ação](link_para_seu_gif_aqui.gif)
-*(Dica: Grave um GIF rápido da tela mostrando o site funcionando. Ferramentas como LICEcap ou ScreenToGif são ótimas para isso)*
-
 ---
 
 ## 📜 Descrição
@@ -15,7 +12,7 @@ Este projeto foi criado como uma peça de portfólio para demonstrar habilidades
 
 ## 🚀 Funcionalidades
 
-**Automação:** Um scraper (robô) roda periodicamente para buscar novos editais e atualizar a base de dados.
+**Automação:** Um scraper roda periodicamente para buscar novos editais e atualizar a base de dados.
 **Centralização:** Agrega editais de diversas fontes em um único lugar.
 **Interface Amigável:** Exibe os editais de forma clara e organizada.
 **Filtragem:** Permite filtrar os resultados por agência de fomento.
@@ -73,4 +70,4 @@ Um dos maiores desafios deste projeto foi o desenvolvimento do scraper. Entender
 
 ## 🔗 Link para o Projeto Online
 
-Você pode acessar a versão ao vivo do projeto em: `[Link do seu projeto no Render.com ou Heroku]`
+Você pode acessar a versão ao vivo do projeto em: https://agregador-editais-app.onrender.com/
