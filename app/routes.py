@@ -31,21 +31,35 @@ def favoritar_edital(edital_id):
     return jsonify({'status': 'success', 'novo_status': edital.favorito})
 
 @main_bp.route('/rodar-scraper-manual-agora')
+# app/routes.py
+
+@main_bp.route('/rodar-scraper-manual-agora')
 def rodar_scraper_manual():
-    print("Recebida requisição para rodar o scraper manualmente...")
+    print("--- INICIANDO SCRAPER MANUALMENTE ---")
     try:
+        # 1. Roda o scraper (que agora só adiciona à sessão)
         rodar_todos_scrapers()
-        # Após rodar, explicitamente fazemos o commit final.
-        # Embora o scraper já faça isso, é uma garantia extra.
-        db.session.commit()
-        print("Scraper executado e commit da sessão principal efetuado.")
-        return "Scraper executado com sucesso! Verifique a página inicial em alguns instantes."
+
+        # 2. Verifica quantos itens estão pendentes para serem salvos
+        itens_pendentes = len(db.session.new)
+        print(f"Itens pendentes para salvar: {itens_pendentes}")
+
+        # 3. Se houver itens, tenta salvar
+        if itens_pendentes > 0:
+            print("Tentando fazer o commit no banco de dados...")
+            db.session.commit()
+            print("--- COMMIT BEM-SUCEDIDO! ---")
+            return f"Scraper executado. {itens_pendentes} novos itens salvos."
+        else:
+            print("Nenhum item novo encontrado para salvar.")
+            return "Scraper executado. Nenhum item novo encontrado."
+
     except Exception as e:
-        # Se algo der errado, desfazemos qualquer mudança pendente.
+        # 4. Se algo der muito errado, desfaz tudo
+        print(f"!!! ERRO DURANTE A TRANSAÇÃO: {e}")
         db.session.rollback()
-        print(f"Erro ao rodar scraper manualmente: {e}")
         return f"Ocorreu um erro ao executar o scraper: {e}"
     finally:
-        # Garante que a sessão seja fechada, liberando a conexão com o banco.
+        # 5. Fecha a sessão para libertar a ligação
         db.session.close()
-        print("Sessão do banco de dados fechada.")
+        print("--- SESSÃO FECHADA ---")

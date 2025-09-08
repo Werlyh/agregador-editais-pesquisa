@@ -58,7 +58,6 @@ def buscar_editais_fapesb():
             print(f"Novo edital encontrado: {titulo}")
 
         if novos_editais_adicionados > 0:
-            db.session.commit()
             print(f"Sucesso! {novos_editais_adicionados} novos editais da FAPESB salvos no banco.")
         else:
             print("Nenhum novo edital da FAPESB encontrado.")
