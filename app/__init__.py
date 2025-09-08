@@ -6,6 +6,10 @@ from .scheduler import sched
 
 migrate = Migrate()
 
+def setup_database(app):
+    with app.app_context():
+        db.create_all()
+
 def create_app():
     app = Flask(__name__)
 
@@ -18,6 +22,8 @@ def create_app():
    
     db.init_app(app)
     migrate.init_app(app, db)
+
+    setup_database(app) 
 
     from . import routes
     app.register_blueprint(routes.main_bp)
