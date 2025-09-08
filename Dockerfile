@@ -1,13 +1,18 @@
 FROM python:3.9-slim
 
-# Instala locales para suporte a pt_BR
-RUN apt-get update && apt-get install -y locales && \
-    locale-gen pt_BR.UTF-8 && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# Instala dependências necessárias incluindo locales
+RUN apt-get update && apt-get install -y \
+    locales \
+    && rm -rf /var/lib/apt/lists/*
 
+# Gera as locales pt_BR
+RUN sed -i '/pt_BR.UTF-8/s/^# //g' /etc/locale.gen && \
+    locale-gen pt_BR.UTF-8
+
+# Configura as variáveis de ambiente
 ENV LANG pt_BR.UTF-8
 ENV LC_ALL pt_BR.UTF-8
+ENV LC_TIME pt_BR.UTF-8
 
 WORKDIR /app
 

@@ -8,10 +8,16 @@ migrate = Migrate()
 
 def setup_database(app):
     with app.app_context():
-        # Use migrations em vez de create_all
+        # Use Flask-Migrate em vez de create_all
         from flask_migrate import upgrade
-        upgrade()
-
+        try:
+            upgrade()
+        except Exception as e:
+            print(f"Erro ao executar migrations: {e}")
+            # Fallback seguro
+            inspector = db.inspect(db.engine)
+            if not inspector.has_table('edital'):
+                db.create_all()
 def create_app():
     app = Flask(__name__)
 

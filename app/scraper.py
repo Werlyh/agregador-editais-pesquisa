@@ -2,14 +2,22 @@ import requests
 from bs4 import BeautifulSoup
 from .models import db, Edital
 from datetime import datetime
-import locale
 import certifi
-
+import locale
 try:
+    # Tenta configurar a locale para pt_BR
     locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')
 except locale.Error:
-    print("Locale pt_BR.UTF-8 não encontrado, tentando outros. Datas podem não ser processadas corretamente.")
-    locale.setlocale(locale.LC_TIME, '')
+    try:
+        # Fallback para locale padrão do sistema
+        locale.setlocale(locale.LC_TIME, '')
+        print("Usando locale padrão do sistema")
+    except locale.Error:
+        # Se nada funcionar, continua sem locale específico
+        print("Locale não disponível, continuando sem configuração específica")
+        pass
+
+
 
 
 URL_FAPESB = "http://www.fapesb.ba.gov.br/category/upload/"
