@@ -15,4 +15,4 @@ def job_function():
         print("Executando tarefa agendada de busca de editais...")
         rodar_todos_scrapers()
 
-sched.add_job(job_function, 'interval', hours=24)
+sched.add_job(job_function, 'interval', minutes=1)
