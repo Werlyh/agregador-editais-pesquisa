@@ -1,3 +1,4 @@
+from .scraper import rodar_todos_scrapers
 from flask import Blueprint, render_template, request, jsonify
 from .models import Edital, db
 from datetime import datetime
@@ -28,3 +29,11 @@ def favoritar_edital(edital_id):
     edital.favorito = not edital.favorito # Inverte o status de favorito
     db.session.commit()
     return jsonify({'status': 'success', 'novo_status': edital.favorito})
+
+@main_bp.route('/rodar-scraper-manual-agora')
+def rodar_scraper_manual():
+    try:
+        rodar_todos_scrapers()
+        return "Scraper executado com sucesso! Verifique a página inicial."
+    except Exception as e:
+        return f"Ocorreu um erro ao executar o scraper: {e}"
