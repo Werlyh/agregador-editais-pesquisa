@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Pesquisa Aberta - Agregador de Editais</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .favorito-on { color: #ffc107; }
+        .favorito-btn { cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Editais e Chamadas de Pesquisa</h1>
+        <p>Centralize suas buscas por fomento à pesquisa.</p>
+
+        <form method="GET" class="row g-3 mb-4">
+            <div class="col-auto">
+                <select name="agencia" class="form-select">
+                    <option value="">Todas as Agências</option>
+                    {% for agencia in agencias %}
+                    <option value="{{ agencia }}">{{ agencia }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-auto">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="favoritos" value="true" id="favoritosCheck">
+                    <label class="form-check-label" for="favoritosCheck">
+                        Apenas Favoritos
+                    </label>
+                </div>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Filtrar</button>
+            </div>
+        </form>
+
+        <div class="list-group">
+            {% for edital in editais %}
+            <div class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">{{ edital.titulo }}</h5>
+                    <small>
+                        <i class="favorito-btn {% if edital.favorito %}favorito-on{% endif %}" 
+                           onclick="toggleFavorito({{ edital.id }}, this)">&#9733;</i> </small>
+                </div>
+                <p class="mb-1"><strong>Agência:</strong> {{ edital.agencia }}</p>
+                {% if edital.data_limite %}
+                <p class="mb-1"><strong>Data Limite:</strong> {{ edital.data_limite.strftime('%d/%m/%Y') }}</p>
+                {% endif %}
+                <a href="{{ edital.link }}" target="_blank" class="btn btn-sm btn-outline-secondary mt-2">Ver Edital</a>
+            </div>
+            {% else %}
+            <p class="text-center">Nenhum edital encontrado.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        function toggleFavorito(editalId, element) {
+            fetch(`/edital/${editalId}/favoritar`, {
+                method: 'POST',
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    element.classList.toggle('favorito-on', data.novo_status);
+                }
+            })
+            .catch(error => console.error('Erro:', error));
+        }
+    </script>
+</body>
+</html>
