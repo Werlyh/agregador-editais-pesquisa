@@ -1,8 +1,5 @@
 # 📂 Agregador de Editais
 
-![GIF do Projeto em Ação](link_para_seu_gif_aqui.gif)
-*(Dica: Grave um GIF rápido da tela mostrando o site funcionando. Ferramentas como LICEcap ou ScreenToGif são ótimas para isso)*
-
 ---
 
 ## 📜 Descrição
