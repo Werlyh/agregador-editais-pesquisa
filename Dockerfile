@@ -1,5 +1,3 @@
-# Dockerfile
-
 FROM python:3.9-slim
 
 WORKDIR /app
@@ -10,5 +8,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# Comando padrão para iniciar o servidor, sem o entrypoint
-CMD ["gunicorn", "--bind", "0.0.0.0:10000", "--workers", "2", "run:app"]
+# Torna nosso script de inicialização executável
+RUN chmod +x /app/entrypoint.sh
+
+# Define o script como o comando de inicialização do container
+CMD ["/app/entrypoint.sh"]
