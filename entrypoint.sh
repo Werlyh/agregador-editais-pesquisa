@@ -1,12 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 
-# Seta a variável de ambiente para o Flask funcionar
-export FLASK_APP=run.py
+# Espera o banco de dados ficar pronto (se necessário)
+# sleep 5
 
-# Aplica as migrações do banco de dados automaticamente
-echo "Aplicando migrações do banco de dados..."
+# Executa migrations
 flask db upgrade
 
-# Inicia o servidor principal da aplicação
-echo "Iniciando Gunicorn..."
-gunicorn --bind 0.0.0.0:10000 --workers 2 run:app
+# Inicia a aplicação
+exec gunicorn -b :10000 --access-logfile - --error-logfile - run:app

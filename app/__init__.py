@@ -1,5 +1,5 @@
 from flask import Flask
-#from flask_migrate import Migrate
+from flask_migrate import Migrate
 import os
 from .models import db
 from .scheduler import sched
@@ -8,7 +8,9 @@ migrate = Migrate()
 
 def setup_database(app):
     with app.app_context():
-        db.create_all()
+        # Use migrations em vez de create_all
+        from flask_migrate import upgrade
+        upgrade()
 
 def create_app():
     app = Flask(__name__)
