@@ -1,3 +1,4 @@
+import os
 from flask import Flask
 from .models import db
 from .scheduler import sched
@@ -5,9 +6,12 @@ from .scheduler import sched
 def create_app():
     app = Flask(__name__)
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///editais.db'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    database_url = os.getenv('DATABASE_URL')
+    if database_url:
+        database_url = database_url.replace("postgres://", "postgresql://", 1)
 
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_url or 'sqlite:///editais.db'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
 
     from . import routes
