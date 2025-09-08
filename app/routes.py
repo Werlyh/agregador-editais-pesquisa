@@ -1,7 +1,7 @@
 from .scraper import rodar_todos_scrapers
 from flask import Blueprint, render_template, request, jsonify
-from .models import Edital, db
 from datetime import datetime
+from .models import db 
 
 main_bp = Blueprint('main', __name__)
 
@@ -32,8 +32,20 @@ def favoritar_edital(edital_id):
 
 @main_bp.route('/rodar-scraper-manual-agora')
 def rodar_scraper_manual():
+    print("Recebida requisição para rodar o scraper manualmente...")
     try:
         rodar_todos_scrapers()
-        return "Scraper executado com sucesso! Verifique a página inicial."
+        # Após rodar, explicitamente fazemos o commit final.
+        # Embora o scraper já faça isso, é uma garantia extra.
+        db.session.commit()
+        print("Scraper executado e commit da sessão principal efetuado.")
+        return "Scraper executado com sucesso! Verifique a página inicial em alguns instantes."
     except Exception as e:
+        # Se algo der errado, desfazemos qualquer mudança pendente.
+        db.session.rollback()
+        print(f"Erro ao rodar scraper manualmente: {e}")
         return f"Ocorreu um erro ao executar o scraper: {e}"
+    finally:
+        # Garante que a sessão seja fechada, liberando a conexão com o banco.
+        db.session.close()
+        print("Sessão do banco de dados fechada.")
